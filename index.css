@@ -1,0 +1,261 @@
+*{
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
+
+.list_and_player{
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Container{
+  background-color: black;
+  position: absolute;
+  top: 0rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.image_container {
+position: relative;
+height: 8rem; /* Adjust the height to your preference */
+z-index: 40;
+}
+
+.left_image, .right_image {
+position: absolute;
+top: 1rem;
+height: 100%;
+border: 0.5rem solid #000; /* set border width and color */
+border-radius: 50%; /* make the border circular */
+box-shadow: 0 0 0.1rem #fff; /* set initial box-shadow */
+
+}
+
+.left_image {
+  transform: none;
+  left: 2rem;
+}
+
+.AudioType{
+margin: 0 50%;
+padding-top: 1rem;
+padding-bottom: 1rem;
+display: flex;
+
+}
+
+.AudioType label{
+display: flex;
+margin-top: 2rem;
+color: white;
+margin: 1rem;
+}
+
+input[type="radio"] {
+margin-left: 0.5rem;
+margin-right: 0.5rem;
+appearance: none;
+-webkit-appearance: none;
+-moz-appearance: none;
+width: 20px;
+height: 20px;
+border-radius: 50%;
+border: 2px solid #ccc;
+background-color: #fff;
+outline: none;
+transition: all 0.3s ease-in-out;
+}
+
+input[type="radio"]:checked {
+background-color: #2196F3;
+border-color:white;
+}
+
+.right_image {
+  transform: none;
+  right: 2rem;
+}
+
+.stereo-zoom-in-out {
+  animation: stereo-zoom-in-out 2s infinite alternate;
+  animation-play-state: running;
+}
+
+.stereo-zoom-out-in {
+  animation: stereo-zoom-out-in 2s infinite alternate;
+  animation-play-state: running;
+}
+
+.mono-zoom-out-in {
+  animation: mono-zoom-in-out 2s infinite alternate;
+  animation-play-state: running;
+}
+@keyframes stereo-zoom-in-out {
+  0% {
+    transform: scale(0.2);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(0.2);
+  }
+}
+
+@keyframes stereo-zoom-out-in {
+  0% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes mono-zoom-in-out{
+  0% {
+    transform: scale(0.2);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(0.2);
+  }
+}
+
+.image_container.paused .left_image,
+.image_container.paused .right_image {
+  animation-play-state: paused;
+}
+
+
+.Container #tracks_list{
+  list-style: none;
+}    
+
+.Container #tracks_list li{
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+.Container #tracks_list li:hover{
+  
+}
+
+.Container #tracks_list li button{
+  
+  cursor:pointer;
+  border-radius: 0.5rem;
+  border-top-color: wheat;
+  border-bottom-color: rgb(174, 43, 226);
+  background-color: rgba(238, 192, 255, 0.234);
+  color: wheat;
+  font-size: 0.9rem;
+  border-right: none;
+  border-left: none;
+  letter-spacing: 0.2rem;
+  width: 90vw;
+  height: 5vh;
+  border-top-width: 0.02rem;
+  border-bottom-width: 0.2rem;
+  box-shadow: 0 0.1rem 0.5rem 0.09rem rgba(29, 245, 216, 0.719);
+}
+
+.Container #tracks_list li button:hover{
+  background-color: rgba(17, 255, 227, 0.965);
+  color: rgb(43, 9, 9);
+  /*box-shadow: 0.4rem 0.1rem 0.8rem 0.2rem rgba(225, 220, 211, 0.211);*/
+  border-color: black;
+  transition: ease-in-out 0.5s;
+  cursor: pointer;
+}
+
+#sourceName {
+  z-index: 20;
+  color: wheat;
+  margin-top: 55vh;
+  animation: stretch_squeeze 5s linear infinite;
+}
+
+@keyframes stretch_squeeze {
+  0% {
+    transform:scaleX(0.6);
+  }
+  50% {
+    transform:scaleX(2);
+  }
+  100%{
+    transform:scaleX(0.6);
+  }
+}
+
+#sourceName .paused{
+  animation-play-state: paused;
+}
+
+
+
+.Player{
+  position: absolute;
+  margin-top: 80vh;
+
+  
+}
+
+.Player #progressbar{
+  background-color: aliceblue;
+  height: 0.3rem;
+  width: 40rem;
+  margin-top: 5vh;
+}
+
+.Player #progressed{
+  height: 0.3rem;
+  background-color: rgb(218, 87, 170);
+  box-shadow: 0 0.2 0.2 0.3 rgba(255, 255, 0, 0.745);
+  
+  width: 0%;
+}
+.Player #prev, .Player #play, .Player #next, .Player #pause{
+  padding: 0.6rem 0.8rem;
+  margin: 2rem;
+  cursor:pointer;
+  /*border-radius: 2rem;
+  border-color: wheat;*/
+  background-color: rgba(192, 253, 255, 0.611);
+  color: wheat;
+  font-size: 1.12rem;
+  font-weight: 300;
+  border-radius: 1.8rem;
+  
+}
+
+#playpausenextprev {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Player #prev:hover, .Player #play:hover, .Player #next:hover, .Player #pause:hover{
+  background-color: rgba(247, 255, 17, 0.965);
+  color: rgb(43, 9, 9);
+  /*box-shadow: 0.4rem 0.1rem 0.8rem 0.2rem rgba(225, 220, 211, 0.211);*/
+  border-color: black;
+  transition: ease-in-out 0.5s;
+  cursor: pointer;
+}
+
+.Player #prev, .Player #next, .Player #play, .Player #pause{
+  color: beige;
+  height: 1.5rem;
+}

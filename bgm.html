@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <audio id="track1">
+        <source src="bgm1.mp4" type="audio/mp3">
+      </audio>
+      <audio id="track2">
+        <source src="JOXION & MADZI - Flow [NCS Release].mp3" type="audio/mp3">
+      </audio>
+      <audio id="track3">
+        <source src="N3WPORT x Britt Lari - Paradise [NCS Release].mp3" type="audio/mp3">
+      </audio>
+      <audio id="track4">
+        <source src="NOYSE & ÆSTRØ - La Manera De Vivir [NCS Release].mp3" type="audio/mp3">
+      </audio>
+
+      <div class="image_container">
+        <img src="speaker.png" alt="Left Image" class="left_image">
+        <div class = "AudioType">
+          <label class="Stereo">
+            <input type="radio" id="stereo" name="audioType" value="stereo" checked>
+            Alternate 
+          </label>
+          <label class="Mono">
+            <input type="radio" id="mono" name="audioType" value="mono">
+            Simultaneous
+          </label>
+        </div>
+        <img src="speaker.png" alt="Right Image" class="right_image">
+      </div>
+      <div class="list_and_player">
+        
+      <div class = "Container">
+        
+        <ul id = "tracks_list">
+         
+            <li> <button onclick="loadMusic('track1')"> bgm1 </button> </li>
+            <li> <button onclick="loadMusic('track2')"> JOXION & MADZI - Flow [NCS Release] </button> </li>
+            <li> <button onclick="loadMusic('track3')"> N3WPORT x Britt Lari - Paradise [NCS Release] </button> </li>
+            <li> <button onclick="loadMusic('track4')"> NOYSE & ÆSTRØ - La Manera De Vivir [NCS Release] </button> </li>
+            
+        </ul>
+      </div>
+        <div id="sourceName"> No Music Loaded </div>
+      <div class="Player" >
+          <div id="progressbar">
+              <div id = "progressed">
+                
+              </div>
+          </div>
+          <div id="playpausenextprev">
+            <img src="previous.png" id = "prev" onclick="prev">
+         <img src="play-button.png" id = "play" onclick="playPause()">
+         <img src="pause.png" id = "pause" onclick="playPause()">
+        <img src="next.png" id = "next" onclick="next">
+          </div>
+         
+    </div>
+  </div>
+      
+      <!--<a href="https://www.flaticon.com/free-icons/back" title="back icons">Back icons created by Smashicons - Flaticon</a>-->
+
+  <script>
+   var audio = null;
+var trackCount = 0;
+var isPlaying = false;
+var tracks = ['track1', 'track2', 'track3', 'track4'];
+var currentId = '';
+var sourceName = '';
+var source = null;
+var index = 0;
+var max = 3;
+var min = 0;
+var progressbar = document.getElementById('progressbar');
+var progressed = document.getElementById('progressed');
+var progress_ratio;
+var audioContext = new AudioContext();
+
+function handleAudioTypeChange() {
+  var isStereo = document.getElementById('stereo').checked;
+  var leftImage = document.querySelector('.left_image');
+  var rightImage = document.querySelector('.right_image');
+  
+  if (isStereo) {
+    audio.setAttribute("stereo", true);
+    leftImage.classList.add('stereo-zoom-in-out');
+    rightImage.classList.add('stereo-zoom-out-in');
+    leftImage.classList.remove('mono-zoom-out-in');
+    rightImage.classList.remove('mono-zoom-out-in');
+  } else {
+    audio.removeAttribute("stereo");
+    leftImage.classList.remove('stereo-zoom-in-out');
+    rightImage.classList.remove('stereo-zoom-out-in');
+    leftImage.classList.add('mono-zoom-out-in');
+    rightImage.classList.add('mono-zoom-out-in');
+  }
+
+  
+}
+
+const stereo = document.querySelector('input[value="stereo"]');
+const mono = document.querySelector('input[value="mono"]');
+
+stereo.addEventListener('click', handleAudioTypeChange);
+stereo.addEventListener('change', handleAudioTypeChange);
+mono.addEventListener('change', handleAudioTypeChange);
+mono.addEventListener('click', handleAudioTypeChange);
+
+document.getElementById('pause').style.display = 'none';
+//document.querySelector('.')
+
+function loadMusic(id) {
+  if (audio != null) {
+    audio.pause();
+  }
+  audio = document.getElementById(id);
+  currentId = id;
+  trackCount = 0;
+  audio.load();
+  sourceName = audio.currentSrc.split('/').pop();
+  sourceName = decodeURIComponent(sourceName).replace('%', ' ');
+  source = document.getElementById('sourceName');
+  isPlaying = false;
+  source.innerHTML = sourceName;
+  audio.style.display = 'none';
+  index = tracks.indexOf(id);
+  if (!isPlaying) {
+    playPause();
+  } 
+  audio.ontimeupdate = function (e) {
+    trackCount++;
+    progress_ratio = audio.currentTime/audio.duration;
+    console.log('playing: ' + 100 *  + progress_ratio + "%");
+    progressed.style.width = 100 * progress_ratio + "%";
+  };
+  
+  progressbar.onclick = function(e){
+    audio.currentTime = audio.duration * e.offsetX/progressbar.offsetWidth;
+  }
+  audio.addEventListener('ended', function() {
+    next();
+  });
+  function handleProgressClick(e) {
+  updateProgress(e.offsetX);
+}
+
+function handleProgressDragStart() {
+  audio.pause();
+}
+
+function handleProgressDragEnd() {
+  audio.play();
+}
+
+function handleProgressDrag(e) {
+  updateProgress(e.offsetX);
+}
+
+function updateProgress(x) {
+  const progress = x / progressbar.offsetWidth;
+  audio.currentTime = audio.duration * progress;
+  progressed.style.width = progress * 100 + "%";
+}
+
+progressbar.addEventListener('click', handleProgressClick);
+progressbar.addEventListener('mousedown', handleProgressDragStart);
+progressbar.addEventListener('mouseup', handleProgressDragEnd);
+progressbar.addEventListener('mousemove', handleProgressDrag);
+
+}
+
+
+function playPause() {
+  if (audio.paused) {
+    audio.play();
+    document.getElementById('play').style.display = 'none';
+    document.getElementById('pause').style.display = 'inline-block';
+    isPlaying = true;
+  } else {
+    audio.pause();
+    document.getElementById('pause').style.display = 'none';
+    document.getElementById('play').style.display = 'inline-block';
+    isPlaying = false;
+  }
+}
+
+function prev() {
+  if (index > min) {
+    index--;
+    loadMusic(tracks[index]);
+  }
+}
+
+function next() {
+  index++;
+  if (index > max) {
+    index = min;
+  }
+  loadMusic(tracks[index]);
+}
+
+function prev() {
+  if (index == min) index = max;
+  else index--;
+  var id = tracks[index];
+  loadMusic(id);
+}
+
+function next() {
+  if (index == max) index = min;
+  else index++;
+  var id = tracks[index];
+  loadMusic(id);
+}
+
+function help(){
+  alert('Select any the type of speaker animation');
+}
+
+
+
+document.getElementById('prev').addEventListener('click', prev);
+document.getElementById('next').addEventListener('click', next);
+document.getElementsByClassName('left_image').addEventListener('hover', help);
+document.getElementsByClassName('right_image').addEventListener('hover', help);
+  </script>
+  
+      
+</body>
+</html> 
